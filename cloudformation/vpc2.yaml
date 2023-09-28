@@ -1,0 +1,150 @@
+Description: Create Primary and Secondary VPCs with Public and Private Subnets
+
+Parameters:
+  VpcNamePrimary:
+    Description: A name for the primary VPC
+    Type: String
+  VpcNameSecondary:
+    Description: A name for the secondary VPC
+    Type: String
+
+Resources:
+  VPCPrimary:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.1.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Ref VpcNamePrimary
+
+  VPCSecondary:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.2.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Ref VpcNameSecondary
+
+  PublicSubnet1Primary:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCPrimary
+      AvailabilityZone: us-east-1a
+      CidrBlock: 10.1.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcNamePrimary} Public Subnet 1
+
+  PublicSubnet2Primary:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCPrimary
+      AvailabilityZone: us-east-1b
+      CidrBlock: 10.1.2.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcNamePrimary} Public Subnet 2
+
+  PrivateSubnet1Primary:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCPrimary
+      AvailabilityZone: us-east-1a
+      CidrBlock: 10.1.3.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcNamePrimary} Private Subnet 1
+
+  PrivateSubnet2Primary:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCPrimary
+      AvailabilityZone: us-east-1b
+      CidrBlock: 10.1.4.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcNamePrimary} Private Subnet 2
+
+  PublicSubnet1Secondary:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCSecondary
+      AvailabilityZone: us-west-2a
+      CidrBlock: 10.2.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcNameSecondary} Public Subnet 1
+
+  PublicSubnet2Secondary:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCSecondary
+      AvailabilityZone: us-west-2b
+      CidrBlock: 10.2.2.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcNameSecondary} Public Subnet 2
+
+  PrivateSubnet1Secondary:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCSecondary
+      AvailabilityZone: us-west-2a
+      CidrBlock: 10.2.3.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcNameSecondary} Private Subnet 1
+
+  PrivateSubnet2Secondary:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPCSecondary
+      AvailabilityZone: us-west-2b
+      CidrBlock: 10.2.4.0/24
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcNameSecondary} Private Subnet 2
+
+Outputs:
+  VPCPrimaryId:
+    Description: VPC ID of the primary VPC in us-east-1
+    Value: !Ref VPCPrimary
+  VPCSecondaryId:
+    Description: VPC ID of the secondary VPC in us-west-2
+    Value: !Ref VPCSecondary
+  PublicSubnet1PrimaryId:
+    Description: Subnet ID of the first public subnet in the primary VPC
+    Value: !Ref PublicSubnet1Primary
+  PublicSubnet2PrimaryId:
+    Description: Subnet ID of the second public subnet in the primary VPC
+    Value: !Ref PublicSubnet2Primary
+  PrivateSubnet1PrimaryId:
+    Description: Subnet ID of the first private subnet in the primary VPC
+    Value: !Ref PrivateSubnet1Primary
+  PrivateSubnet2PrimaryId:
+    Description: Subnet ID of the second private subnet in the primary VPC
+    Value: !Ref PrivateSubnet2Primary
+  PublicSubnet1SecondaryId:
+    Description: Subnet ID of the first public subnet in the secondary VPC
+    Value: !Ref PublicSubnet1Secondary
+  PublicSubnet2SecondaryId:
+    Description: Subnet ID of the second public subnet in the secondary VPC
+    Value: !Ref PublicSubnet2Secondary
+  PrivateSubnet1SecondaryId:
+    Description: Subnet ID of the first private subnet in the secondary VPC
+    Value: !Ref PrivateSubnet1Secondary
+  PrivateSubnet2SecondaryId:
+    Description: Subnet ID of the second private subnet in the secondary VPC
+    Value: !Ref PrivateSubnet2Secondary
